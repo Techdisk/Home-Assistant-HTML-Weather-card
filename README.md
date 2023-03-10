@@ -2,7 +2,7 @@
 Just a place to put a copy of the weather card I use in Home Assistant.
 
 Notes:
-  - This is meant to be used with https://github.com/PiotrMachowski/Home-Assistant-Lovelace-HTML-Jinja2-Template-card, inside a card.
+  - This is meant to be used with the [Lovelace HTML Jinja2 Template card](https://github.com/PiotrMachowski/Home-Assistant-Lovelace-HTML-Jinja2-Template-card).
   - You will need to change all the sensor names to your own stuff
     - `sensor.weather_update_time` is my own template sensor, the template being `{{int(as_timestamp(states.sensor.toronto_observation_time.last_updated)) | as_datetime}}`. I needed the sensor for other stuff and just reused it here, but you can probably write something better and cleaner which doesn't need another sensor.
   - This relies on locally hosted icons for the current weather condition being located within your Home Assistant config folder; `/config/www/weather`
