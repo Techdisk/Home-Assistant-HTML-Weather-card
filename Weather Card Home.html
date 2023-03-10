@@ -1,0 +1,127 @@
+type: custom:html-template-card
+ignore_line_breaks: true
+content: >
+  <style type="text/css">
+    a {
+      text-decoration:none;
+    }
+    h1 {
+      line-height: 29px;
+    }
+    .warnings {
+      margin-top: 0;
+    }
+    .condition {
+      margin-bottom: 0;
+    }
+    .temp {
+      margin-top: 10px;
+    }
+    .conditionimg {
+      width:60px;
+      height:60px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    hr {
+      margin-top: 5px;
+      margin-bottom: 5px;
+    }
+  </style>
+  
+  {% if not is_state('sensor.warnings', '0') %}
+  {% for num in range(1,int(states('sensor.warnings'))+1) %}
+  <h1 class="warnings"> <a href="https://weather.gc.ca/warnings/report_e.html?on61" target="_blank" rel="noopener noreferrer">
+    <font color=#bd1c1c>{{ state_attr('sensor.warnings',"alert_"~num) }} in effect. ({{ as_timestamp(strptime(state_attr('sensor.warnings',"alert_time_"~num), '%A %B %d, %Y at %H:%M %Z')) | timestamp_custom("%H:%M")}})</font>
+  </a></h1>
+  {% endfor %}
+  {% endif %}
+
+  {% if not is_state('sensor.watches', '0') %}
+  {% for num in range(1,int(states('sensor.watches'))+1) %}
+  <h2 class="warnings"><a href="https://weather.gc.ca/warnings/report_e.html?on61" target="_blank" rel="noopener noreferrer">
+    <font color=#bd951c>{{ state_attr('sensor.watches',"alert_"~num) }} in effect. ({{ as_timestamp(strptime(state_attr('sensor.watches',"alert_time_"~num), '%A %B %d, %Y at %H:%M %Z')) | timestamp_custom("%H:%M")}})</font>
+  </a></h2>
+  {% endfor %}
+  {% endif %}
+
+  {% if not is_state('sensor.advisories','0') %}
+  {% for num in range(1,int(states('sensor.advisories'))+1) %}
+  <h3 class="warnings"><a href="https://weather.gc.ca/warnings/report_e.html?on61" target="_blank" rel="noopener noreferrer">
+    <font color=#e1e1e1>{{ state_attr('sensor.advisories',"alert_"~num) }} in effect. ({{ as_timestamp(strptime(state_attr('sensor.advisories',"alert_time_"~num), '%A %B %d, %Y at %H:%M %Z')) | timestamp_custom("%H:%M")}})</font>
+  </a></h3>
+  {% endfor %}
+  {% endif %}
+
+  {% if not is_state('sensor.statements','0') %}
+  {% for num in range(1,int(states('sensor.statements'))+1) %}
+  <h4 class="warnings"><a href="https://weather.gc.ca/warnings/report_e.html?on61" target="_blank" rel="noopener noreferrer">
+    <font color=#e1e1e1>{{ state_attr('sensor.statements',"alert_"~num) }} in effect. ({{ as_timestamp(strptime(state_attr('sensor.statements',"alert_time_"~num), '%A %B %d, %Y at %H:%M %Z')) | timestamp_custom("%H:%M")}})</font>
+  </a></h4>
+  {% endfor %}
+  {% endif %}
+  
+  {% if not is_state('sensor.endings','0') %}
+  {% for num in range(1,int(states('sensor.endings'))+1) %}
+  <h5 class="warnings">
+    <font color=#19bf19>{{ state_attr('sensor.endings',"alert_"~num) }} ({{ as_timestamp(strptime(state_attr('sensor.endings',"alert_time_"~num), '%A %B %d, %Y at %H:%M %Z')) | timestamp_custom("%H:%M")}})</font>
+  </h5>
+  {% endfor %}
+  {% endif %}
+  
+  <hr>
+
+  <table style="width:100%;text-align:center">
+    <tr>
+      <td>
+        <img class="conditionimg" src="/local/weather/icon{{ states('sensor.icon_code') }}_60dp.png">
+      </td>
+      <td>
+        <a href="https://weather.gc.ca/city/pages/on-143_metric_e.html" target="_blank" rel="noopener noreferrer"><font color=var(--primary-text-color)>
+          <h1 class="condition">{{states('sensor.condition') }}</h1>
+          <h2 class="temp">{{states('sensor.temperature') }}°C</h2>
+        </font></a>
+      </td>
+      <td>
+        <img class="conditionimg" src="/local/weather/icon{{ states('sensor.icon_code') }}_60dp.png">
+      </td>
+    </tr>
+  </table>
+  <hr>
+  <table style="table-layout:fixed;width:100%;text-align:center">
+    <thead>
+      <tr>
+        <th>High</th>
+        <th>Low</th>
+        <th>Pressure</th>
+        {% if not is_state('sensor.visibility', '24.1') %}
+        <th>Visibility</th>
+        {%endif%}
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>{{states('sensor.high_temperature')}}°C</td>
+        <td>{{states('sensor.low_temperature')}}°C</td>
+        <td>{{states('sensor.pressure') }} kPa{% if is_state('sensor.tendency' , 'Rising') %}<b>↑</b>{%elif is_state('sensor.tendency' , 'Falling') %}<b>↓</b>{%endif%}</td>        
+        {% if not is_state('sensor.visibility', '24.1') %}
+        <td>{{ states('sensor.visibility') }} km</td>
+        {%endif%}
+      </tr>
+    </tbody>
+  </table>
+
+  <hr>
+
+  <p>{{states('sensor.forecast')}}</p>
+  
+  <hr>
+
+  <p>Observed on {{ as_timestamp(states('sensor.toronto_observation_time')) | timestamp_custom("%b %d at %H:%M")}}, Retrieved at {{ as_timestamp(states('sensor.weather_update_time')) | timestamp_custom("%H:%M:%S")}}.</p>
+
+  <p style="margin-bottom: 0;">
+    <a href="https://weather.gc.ca/city/pages/on-143_metric_e.html" target="_blank" rel="noopener noreferrer">
+      <font color=#03a9f4>{{ state_attr('sensor.condition', 'attribution') }}, observed at {{ state_attr('sensor.condition', 'station') }}</font>
+    </a>
+  </p>
