@@ -16,4 +16,4 @@ IMPORTANT:
 
 If you want to go and play around with this, I recommend that you edit the file **outside** of the card editor in Home Assistant. Saving the changes on the HTML Jinja2 template card will screw up the code formatting something fierce inside the card editor. The final output should still be the same, however. I usually just edit inside a file and then copy and paste the entire thing into home assistant and overwrite everything each time, which is why the card header stuff is still there in this file.
 
-Have fun! If anything breaks, send your complaints to `/dev/null`.
+Have fun! If anything breaks, send your complaints to `/dev/null`. If you've got suggestions, I guess you could leave a comment somewhere or something. I don't really use github much.
